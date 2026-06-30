@@ -36,6 +36,17 @@ import { cn } from "@/lib/utils";
 
 export default function DoctorsPage() {
   const [session, setSession] = useState<any>(null); const [status, setStatus] = useState('loading'); useEffect(() => { const u = localStorage.getItem('user'); if (u) { setSession({ user: JSON.parse(u) }); setStatus('authenticated'); } else { setStatus('unauthenticated'); } }, []);
+  // Permission check
+  useEffect(() => {
+    const u = localStorage.getItem('user');
+    if (u) {
+      const user = JSON.parse(u);
+      const allowed = ['admin'];
+      if (!allowed.includes(user.role) && user.role !== 'admin') {
+        router.push('/dashboard');
+      }
+    }
+  }, []);
   const router = useRouter();
   const [doctors, setDoctors] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);

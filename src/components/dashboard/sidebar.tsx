@@ -39,7 +39,7 @@ const navigation = [
   ]},
 ];
 
-export function Sidebar({ className }: { className?: string }) {
+export function Sidebar({ className, userRole }: { className?: string; userRole?: string }) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
   const [user, setUser] = useState<any>({ firstName: "User", lastName: "", role: "" });

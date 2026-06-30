@@ -27,6 +27,17 @@ const roomTypeColors: Record<string, string> = {
 
 export default function RoomsPage() {
   const [session, setSession] = useState<any>(null); const [status, setStatus] = useState('loading'); useEffect(() => { const u = localStorage.getItem('user'); if (u) { setSession({ user: JSON.parse(u) }); setStatus('authenticated'); } else { setStatus('unauthenticated'); } }, []);
+  // Permission check
+  useEffect(() => {
+    const u = localStorage.getItem('user');
+    if (u) {
+      const user = JSON.parse(u);
+      const allowed = ['admin','nurse'];
+      if (!allowed.includes(user.role) && user.role !== 'admin') {
+        router.push('/dashboard');
+      }
+    }
+  }, []);
   const router = useRouter();
   const [rooms, setRooms] = useState<any[]>([]);
   const [beds, setBeds] = useState<any[]>([]);
