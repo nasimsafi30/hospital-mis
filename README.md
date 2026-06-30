@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🏥 Hospital MIS - Complete Hospital Management Information System
 
-## Getting Started
+A comprehensive, full-stack hospital management system built with modern web technologies. Manage patients, doctors, appointments, pharmacy, laboratory, billing, inventory, and more — all from a single, elegant dashboard.
 
-First, run the development server:
+## ✨ Features
+
+### 📋 Core Modules
+
+- **Patient Management** — Full CRUD with medical history, documents, and QR code wristbands
+- **Doctor Management** — Profiles, schedules, specializations, and department assignments
+- **Appointment Scheduling** — Calendar view, status tracking (confirm/cancel/complete), conflict detection
+- **Inpatient Management** — Bed allocation, vitals tracking, discharge & transfer workflows
+- **Medical Records** — Digital records with diagnosis, prescriptions, and printable reports
+- **Prescriptions** — Digital Rx with PDF export and printing
+- **Pharmacy** — Medicine inventory with QR codes, barcode scanning, stock alerts, and dispensing
+- **Laboratory** — Test requests, result uploads, and lab reports
+- **Billing & Invoicing** — Invoice generation, payment tracking, refunds, and QR payment codes
+- **Inventory Management** — Stock tracking, low stock alerts, expiry date monitoring
+- **Departments, Rooms & Beds** — Hospital facility management
+
+### 📊 Dashboard & Analytics
+
+- Real-time statistics and KPIs
+- Interactive charts (line, bar, pie, area)
+- Revenue trends, patient demographics, appointment analytics
+- Department performance metrics
+
+### 🔐 Security & Access Control
+
+- Role-based access (Admin, Doctor, Nurse, Receptionist, Pharmacist, Lab Technician)
+- JWT authentication with protected API routes
+- Audit logging for all system activities
+- Password reset functionality
+
+### 🎨 Modern UI/UX
+
+- Dark/Light mode with system preference detection
+- Responsive design (mobile, tablet, desktop)
+- Animated transitions with Framer Motion
+- Glassmorphism design elements
+- Interactive data tables with sorting, filtering, and pagination
+
+### 📱 Additional Features
+
+- QR Code generation for patients, medicines, and invoices
+- Barcode/QR scanner support for pharmacy dispensing
+- PDF export for medical records, prescriptions, and invoices
+- Print-friendly layouts
+- PWA support with offline capabilities
+- RESTful API with 60+ endpoints
+
+## 🛠️ Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| **Framework** | Next.js 14 (App Router) |
+| **Language** | TypeScript |
+| **Database** | Neon PostgreSQL (Serverless) |
+| **ORM** | Drizzle ORM |
+| **Authentication** | NextAuth.js + JWT |
+| **UI Library** | Radix UI + Tailwind CSS |
+| **Charts** | Recharts |
+| **Forms** | React Hook Form + Zod |
+| **PDF** | jsPDF |
+| **QR Codes** | qrcode.react |
+| **Animations** | Framer Motion |
+| **Icons** | Lucide React |
+| **Deployment** | Vercel |
+
+## 📸 Screenshots
+
+### Dashboard
+
+![Dashboard](screenshots/dashboard.png)
+
+### Patient Management
+
+![Patients](screenshots/patients.png)
+
+### Pharmacy with QR Codes
+
+![Pharmacy](screenshots/pharmacy.png)
+
+### Appointments Calendar
+
+![Appointments](screenshots/appointments.png)
+
+### Analytics
+
+![Analytics](screenshots/analytics.png)
+
+## 🚀 Quick Start
 
 ```bash
+# Clone the repository
+git clone https://github.com/yourusername/hospital-mis.git
+cd hospital-mis
+
+# Install dependencies
+npm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Edit .env.local with your Neon database URL
+
+# Push database schema
+npx drizzle-kit push
+
+# Seed with sample data
+npm run db:seed-complete
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
