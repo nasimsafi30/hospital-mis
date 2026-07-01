@@ -266,7 +266,7 @@ export default function MedicalRecordsPage() {
       {/* Add/Edit Record Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-lg mx-4 shadow-2xl">
+          <div className="bg-white dark:bg-card rounded-2xl p-6 w-full max-w-lg mx-4 shadow-2xl">
             <h2 className="text-xl font-bold mb-4">{selectedRecord ? "Edit Record" : "Add Record"}</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
@@ -307,7 +307,7 @@ export default function MedicalRecordsPage() {
       {/* QR Code Modal */}
       {qrRecord && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setQrRecord(null)}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="bg-white dark:bg-card rounded-2xl p-8 text-center shadow-2xl" onClick={e => e.stopPropagation()}>
             <h2 className="text-xl font-bold">Medical Record QR</h2>
             <p className="text-sm text-muted-foreground mb-2">{qrRecord.recordNumber}</p>
             <p className="text-sm mb-4">{qrRecord.patient?.firstName} {qrRecord.patient?.lastName}</p>

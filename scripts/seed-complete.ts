@@ -1,11 +1,14 @@
+// ==================== FIXED IMPORTS ====================
+// Remove duplicate imports - keep only ONE import for financeTransactions
 import { db } from '../src/lib/db';
 import {
+  financeTransactions, // ✅ Only import once from schema
   users, departments, doctors, patients, rooms, beds,
   appointments, admissions, vitals, medicalRecords,
   prescriptions, labTests, bills, payments, inventory,
   inventoryTransactions, notifications, settings, auditLogs,
 } from '../src/lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm'; // ✅ Only import eq, not financeTransactions
 import bcrypt from 'bcryptjs';
 import * as dotenv from 'dotenv';
 
@@ -24,13 +27,13 @@ type RoomType = 'general' | 'semi_private' | 'private' | 'icu' | 'deluxe';
 type UserRole = 'admin' | 'doctor' | 'nurse' | 'receptionist' | 'pharmacist' | 'lab_technician';
 
 // ==================== HELPER FUNCTIONS ====================
-const randomInt = (min: number, max: number): number => 
+const randomInt = (min: number, max: number): number =>
   Math.floor(Math.random() * (max - min + 1)) + min;
 
-const randomFloat = (min: number, max: number, decimals: number = 2): number => 
+const randomFloat = (min: number, max: number, decimals: number = 2): number =>
   parseFloat((Math.random() * (max - min) + min).toFixed(decimals));
 
-const randomElement = <T>(array: readonly T[]): T => 
+const randomElement = <T>(array: readonly T[]): T =>
   array[Math.floor(Math.random() * array.length)];
 
 const randomDate = (startDays: number, endDays: number): Date => {
@@ -39,7 +42,7 @@ const randomDate = (startDays: number, endDays: number): Date => {
   return date;
 };
 
-const generateId = (prefix: string, num: number): string => 
+const generateId = (prefix: string, num: number): string =>
   `${prefix}-${String(num).padStart(4, '0')}`;
 
 // ==================== DATA ARRAYS ====================
@@ -137,11 +140,11 @@ const inventoryItemsData = [
 
 // ==================== SEED FUNCTION ====================
 async function seedComplete() {
-  console.log('ðŸŒ± Starting complete database seed...\n');
-  console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•\n');
+  console.log('🌱 Starting complete database seed...\n');
+  console.log('═══════════════════════════════════════════════════════════════\n');
 
   // ==================== 1. SETTINGS ====================
-  console.log('ðŸ“‹ Creating system settings...');
+  console.log('📋 Creating system settings...');
   await db.insert(settings).values({
     hospitalName: 'City General Hospital',
     address: '123 Healthcare Blvd, Medical District, New York, NY 10001',
@@ -157,10 +160,10 @@ async function seedComplete() {
     smsNotifications: false,
     pushNotifications: true,
   });
-  console.log('âœ… Settings created\n');
+  console.log('✅ Settings created\n');
 
   // ==================== 2. DEPARTMENTS ====================
-  console.log('ðŸ¥ Creating departments...');
+  console.log('🏥 Creating departments...');
   const departmentsData = [
     { name: 'Cardiology', description: 'Heart and cardiovascular system', floor: '2nd Floor', building: 'Main Building', phone: '+1-555-1001', email: 'cardiology@hospital.com' },
     { name: 'Neurology', description: 'Brain and nervous system', floor: '3rd Floor', building: 'Main Building', phone: '+1-555-1002', email: 'neurology@hospital.com' },
@@ -177,10 +180,10 @@ async function seedComplete() {
     const [created] = await db.insert(departments).values(dept).returning();
     createdDepartments.push(created);
   }
-  console.log('âœ… 8 Departments created\n');
+  console.log('✅ 8 Departments created\n');
 
   // ==================== 3. USERS ====================
-  console.log('ðŸ‘¥ Creating users...');
+  console.log('👥 Creating users...');
   const password = await bcrypt.hash('Password@123', 12);
 
   const usersData = [
@@ -202,10 +205,10 @@ async function seedComplete() {
     const [created] = await db.insert(users).values(user).returning();
     createdUsers.push(created);
   }
-  console.log('âœ… 11 Users created\n');
+  console.log('✅ 11 Users created\n');
 
   // ==================== 4. DOCTORS ====================
-  console.log('ðŸ‘¨â€âš•ï¸ Creating doctor profiles...');
+  console.log('👨‍⚕️ Creating doctor profiles...');
   const doctorsData = [
     { userId: createdUsers[1].id, firstName: 'John', lastName: 'Smith', specialization: 'Cardiologist', qualification: 'MD, FACC', licenseNumber: 'LIC-001', experience: 15, departmentId: createdDepartments[0].id, consultationFee: '200.00', availableDays: ['Monday', 'Wednesday', 'Friday'], availableTimeStart: '09:00', availableTimeEnd: '17:00', maxPatientsPerDay: 20 },
     { userId: createdUsers[2].id, firstName: 'Sarah', lastName: 'Johnson', specialization: 'Neurologist', qualification: 'MD, PhD', licenseNumber: 'LIC-002', experience: 12, departmentId: createdDepartments[1].id, consultationFee: '250.00', availableDays: ['Tuesday', 'Thursday', 'Saturday'], availableTimeStart: '10:00', availableTimeEnd: '18:00', maxPatientsPerDay: 15 },
@@ -225,10 +228,10 @@ async function seedComplete() {
   await db.update(departments).set({ headDoctorId: createdDoctors[1].id }).where(eq(departments.name, 'Neurology'));
   await db.update(departments).set({ headDoctorId: createdDoctors[2].id }).where(eq(departments.name, 'Orthopedics'));
   await db.update(departments).set({ headDoctorId: createdDoctors[3].id }).where(eq(departments.name, 'Pediatrics'));
-  console.log('âœ… 5 Doctor profiles created\n');
+  console.log('✅ 5 Doctor profiles created\n');
 
   // ==================== 5. ROOMS & BEDS ====================
-  console.log('ðŸ›ï¸ Creating rooms and beds...');
+  console.log('🛏️ Creating rooms and beds...');
   const roomsData: Array<{ roomNumber: string; roomType: RoomType; floor: string; building: string; departmentId: number; dailyRate: string }> = [
     { roomNumber: 'W101', roomType: 'general', floor: '1st Floor', building: 'West Wing', departmentId: createdDepartments[2].id, dailyRate: '150.00' },
     { roomNumber: 'W102', roomType: 'general', floor: '1st Floor', building: 'West Wing', departmentId: createdDepartments[2].id, dailyRate: '150.00' },
@@ -250,10 +253,10 @@ async function seedComplete() {
       createdBeds.push(bed);
     }
   }
-  console.log('âœ… 5 Rooms and 12 Beds created\n');
+  console.log('✅ 5 Rooms and 12 Beds created\n');
 
   // ==================== 6. PATIENTS ====================
-  console.log('ðŸƒ Creating patients...');
+  console.log('🏃 Creating patients...');
   const createdPatients = [];
   for (let i = 0; i < 100; i++) {
     const firstName = randomElement(firstNames);
@@ -288,13 +291,13 @@ async function seedComplete() {
       maritalStatus: randomElement(maritalStatuses),
       preferredLanguage: randomElement(languages),
     }).returning();
-    
+
     createdPatients.push(patient);
   }
-  console.log('âœ… 100 Patients created\n');
+  console.log('✅ 100 Patients created\n');
 
   // ==================== 7. APPOINTMENTS ====================
-  console.log('ðŸ“… Creating appointments...');
+  console.log('📅 Creating appointments...');
   const createdAppointments = [];
   for (let i = 0; i < 200; i++) {
     const appointmentDate = randomDate(-10, 30);
@@ -302,7 +305,7 @@ async function seedComplete() {
     const minutes = randomElement(['00', '15', '30', '45']);
     const status: AppointmentStatus = randomElement(appointmentStatuses);
     const priority: Priority = randomElement(priorities);
-    
+
     const [appointment] = await db.insert(appointments).values({
       appointmentNumber: generateId('APT', i + 1),
       patientId: randomElement(createdPatients).id,
@@ -317,18 +320,18 @@ async function seedComplete() {
       priority,
       duration: randomElement([15, 30, 45, 60]),
     }).returning();
-    
+
     createdAppointments.push(appointment);
   }
-  console.log('âœ… 200 Appointments created\n');
+  console.log('✅ 200 Appointments created\n');
 
   // ==================== 8. ADMISSIONS ====================
-  console.log('ðŸ¨ Creating admissions...');
+  console.log('🏨 Creating admissions...');
   const createdAdmissions = [];
   for (let i = 0; i < 20; i++) {
     const admissionDate = randomDate(-15, -1);
     const status: AdmissionStatus = i < 5 ? 'discharged' : i < 10 ? 'ready_for_discharge' : 'under_treatment';
-    
+
     const [admission] = await db.insert(admissions).values({
       admissionId: generateId('ADM', i + 1),
       patientId: createdPatients[i].id,
@@ -342,7 +345,7 @@ async function seedComplete() {
       notes: 'Patient stable',
       diet: randomElement(diets),
     }).returning();
-    
+
     createdAdmissions.push(admission);
 
     if (status !== 'discharged') {
@@ -350,10 +353,10 @@ async function seedComplete() {
       await db.update(rooms).set({ isOccupied: true }).where(eq(rooms.id, admission.roomId!));
     }
   }
-  console.log('âœ… 20 Admissions created\n');
+  console.log('✅ 20 Admissions created\n');
 
   // ==================== 9. VITALS ====================
-  console.log('ðŸ’“ Creating vitals...');
+  console.log('💓 Creating vitals...');
   for (const admission of createdAdmissions) {
     if (admission.status !== 'discharged') {
       for (let i = 0; i < randomInt(3, 5); i++) {
@@ -371,10 +374,10 @@ async function seedComplete() {
       }
     }
   }
-  console.log('âœ… Vitals created\n');
+  console.log('✅ Vitals created\n');
 
   // ==================== 10. MEDICAL RECORDS ====================
-  console.log('ðŸ“‹ Creating medical records...');
+  console.log('📋 Creating medical records...');
   const createdRecords = [];
   for (let i = 0; i < 100; i++) {
     const [record] = await db.insert(medicalRecords).values({
@@ -390,10 +393,10 @@ async function seedComplete() {
     }).returning();
     createdRecords.push(record);
   }
-  console.log('âœ… 100 Medical records created\n');
+  console.log('✅ 100 Medical records created\n');
 
   // ==================== 11. PRESCRIPTIONS ====================
-  console.log('ðŸ’Š Creating prescriptions...');
+  console.log('💊 Creating prescriptions...');
   for (let i = 0; i < 150; i++) {
     const medicine = randomElement(medicines);
     await db.insert(prescriptions).values({
@@ -412,15 +415,15 @@ async function seedComplete() {
       startDate: randomDate(-60, -1).toISOString().split('T')[0],
     });
   }
-  console.log('âœ… 150 Prescriptions created\n');
+  console.log('✅ 150 Prescriptions created\n');
 
   // ==================== 12. LAB TESTS ====================
-  console.log('ðŸ”¬ Creating lab tests...');
+  console.log('🔬 Creating lab tests...');
   for (let i = 0; i < 60; i++) {
     const test = randomElement(labTestTypes);
     const status: LabTestStatus = randomElement(['pending', 'in_progress', 'completed'] as LabTestStatus[]);
     const isCompleted = status === 'completed';
-    
+
     await db.insert(labTests).values({
       testNumber: generateId('LAB', i + 1),
       patientId: randomElement(createdPatients).id,
@@ -438,23 +441,23 @@ async function seedComplete() {
       performedAt: isCompleted ? new Date() : null,
     });
   }
-  console.log('âœ… 60 Lab tests created\n');
+  console.log('✅ 60 Lab tests created\n');
 
   // ==================== 13. BILLS ====================
-  console.log('ðŸ’° Creating bills...');
+  console.log('💰 Creating bills...');
   for (let i = 0; i < 100; i++) {
     const totalAmount = randomFloat(50, 5000);
     const status: PaymentStatus = randomElement(paymentStatuses);
     let paidAmount = 0;
     if (status === 'paid') paidAmount = totalAmount;
     else if (status === 'partial') paidAmount = randomFloat(totalAmount * 0.3, totalAmount * 0.8);
-    
+
     const items = [
       { description: 'Consultation Fee', quantity: 1, unitPrice: randomFloat(100, 300), total: randomFloat(100, 300), category: 'Consultation' },
       { description: 'Lab Tests', quantity: randomInt(1, 3), unitPrice: randomFloat(25, 150), total: randomFloat(50, 450), category: 'Laboratory' },
       { description: 'Medication', quantity: randomInt(1, 5), unitPrice: randomFloat(10, 100), total: randomFloat(10, 500), category: 'Pharmacy' },
     ];
-    
+
     const [bill] = await db.insert(bills).values({
       billNumber: generateId('BILL', i + 1),
       patientId: randomElement(createdPatients).id,
@@ -483,10 +486,10 @@ async function seedComplete() {
       });
     }
   }
-  console.log('âœ… 100 Bills created\n');
+  console.log('✅ 100 Bills created\n');
 
   // ==================== 14. INVENTORY ====================
-  console.log('ðŸ“¦ Creating inventory...');
+  console.log('📦 Creating inventory...');
   for (const item of inventoryItemsData) {
     const quantity = randomInt(item.reorderLevel - 10, item.reorderLevel * 3);
     const [inventoryItem] = await db.insert(inventory).values({
@@ -517,10 +520,10 @@ async function seedComplete() {
       createdAt: randomDate(-30, -1),
     });
   }
-  console.log('âœ… 10 Inventory items created\n');
+  console.log('✅ 10 Inventory items created\n');
 
   // ==================== 15. NOTIFICATIONS ====================
-  console.log('ðŸ”” Creating notifications...');
+  console.log('🔔 Creating notifications...');
   for (let i = 0; i < 50; i++) {
     await db.insert(notifications).values({
       userId: randomElement(createdUsers).id,
@@ -531,10 +534,10 @@ async function seedComplete() {
       link: '/dashboard',
     });
   }
-  console.log('âœ… 50 Notifications created\n');
+  console.log('✅ 50 Notifications created\n');
 
   // ==================== 16. AUDIT LOGS ====================
-  console.log('ðŸ“ Creating audit logs...');
+  console.log('📝 Creating audit logs...');
   for (let i = 0; i < 100; i++) {
     const user = randomElement(createdUsers);
     await db.insert(auditLogs).values({
@@ -549,31 +552,56 @@ async function seedComplete() {
       timestamp: randomDate(-30, -1),
     });
   }
-  console.log('âœ… 100 Audit logs created\n');
+  console.log('✅ 100 Audit logs created\n');
+
+  // ==================== 17. FINANCE TRANSACTIONS ====================
+  console.log('💰 Creating finance transactions...');
+  const financeData = [
+    { type: 'income', category: 'Consultation', amount: '1500.00', description: 'Patient consultation fees', date: '2025-01-15' },
+    { type: 'income', category: 'Pharmacy', amount: '3200.00', description: 'Medicine sales', date: '2025-01-20' },
+    { type: 'income', category: 'Laboratory', amount: '2100.00', description: 'Lab test charges', date: '2025-02-01' },
+    { type: 'income', category: 'Room', amount: '5000.00', description: 'Room charges', date: '2025-02-10' },
+    { type: 'expense', category: 'Salaries', amount: '8000.00', description: 'Staff salaries', date: '2025-01-30' },
+    { type: 'expense', category: 'Supplies', amount: '2500.00', description: 'Medical supplies', date: '2025-02-05' },
+    { type: 'expense', category: 'Equipment', amount: '4500.00', description: 'New equipment', date: '2025-02-15' },
+    { type: 'expense', category: 'Utilities', amount: '1200.00', description: 'Electricity bill', date: '2025-01-25' },
+    { type: 'income', category: 'Procedure', amount: '3800.00', description: 'Surgery charges', date: '2025-03-01' },
+    { type: 'expense', category: 'Maintenance', amount: '1500.00', description: 'Building maintenance', date: '2025-03-10' },
+  ];
+
+  for (const item of financeData) {
+    await db.insert(financeTransactions).values({
+      type: item.type,
+      category: item.category,
+      amount: item.amount,
+      description: item.description,
+      date: item.date,
+    });
+  }
+  console.log('✅ 10 Finance transactions created\n');
 
   // ==================== SUMMARY ====================
-  console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•');
-  console.log('ðŸŽ‰ DATABASE SEED COMPLETED!');
-  console.log('â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•\n');
-  console.log('ðŸ“§ DEFAULT LOGIN CREDENTIALS:');
-  console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€');
+  console.log('═══════════════════════════════════════════════════════════════');
+  console.log('🎉 DATABASE SEED COMPLETED!');
+  console.log('═══════════════════════════════════════════════════════════════\n');
+  console.log('📧 DEFAULT LOGIN CREDENTIALS:');
+  console.log('─────────────────────────────────────────────────────────────────');
   console.log('Admin:         admin@hospital.com / Password@123');
   console.log('Doctor:        john.smith@hospital.com / Password@123');
   console.log('Nurse:         nurse.wilson@hospital.com / Password@123');
   console.log('Receptionist:  reception1@hospital.com / Password@123');
   console.log('Pharmacist:    pharmacist1@hospital.com / Password@123');
   console.log('Lab Tech:      labtech1@hospital.com / Password@123');
-  console.log('â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€\n');
+  console.log('─────────────────────────────────────────────────────────────────\n');
 }
 
 // ==================== EXECUTE ====================
 seedComplete()
   .catch((error) => {
-    console.error('âŒ Seed failed:', error);
+    console.error('❌ Seed failed:', error);
     process.exit(1);
   })
   .finally(() => {
     console.log('Seed script execution completed.');
     process.exit(0);
   });
-

@@ -148,7 +148,7 @@ export default function BillingPage() {
 
       {qrBill && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setQrBill(null)}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="bg-white dark:bg-card rounded-2xl p-8 text-center shadow-2xl" onClick={e => e.stopPropagation()}>
             <h2 className="text-xl font-bold">Invoice: {qrBill.billNumber}</h2>
             <div className="bg-white p-4 rounded-xl inline-block mt-4">
               <QRCodeSVG value={JSON.stringify({id:qrBill.id, bill:qrBill.billNumber, amount:qrBill.totalAmount, status:qrBill.paymentStatus})} size={200} level="H" />

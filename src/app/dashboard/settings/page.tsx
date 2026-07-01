@@ -29,20 +29,34 @@ export default function SettingsPage() {
     hospitalName: "City General Hospital", timezone: "America/New_York", language: "en", dateFormat: "MM/DD/YYYY"
   });
 
+  // Load saved data on mount
   useEffect(() => {
     const token = localStorage.getItem("token");
     const userStr = localStorage.getItem("user");
     if (!token) { router.push("/login"); return; }
+    
     if (userStr) {
       const u = JSON.parse(userStr);
       setUser(u);
       setProfile({ firstName: u.firstName || "", lastName: u.lastName || "", email: u.email || "", phone: u.phone || "" });
     }
-    // Load saved avatar
-    const savedAvatar = localStorage.getItem("avatar");
-    if (savedAvatar) setAvatarPreview(savedAvatar);
+    
+    // Load saved avatar - check both localStorage keys
+    const savedAvatar = localStorage.getItem("avatar") || localStorage.getItem("userAvatar");
+    if (savedAvatar) {
+      setAvatarPreview(savedAvatar);
+    }
+    
+    // Load saved notifications
+    const savedNotif = localStorage.getItem("notifications");
+    if (savedNotif) setNotifications(JSON.parse(savedNotif));
+    
+    // Load saved system settings
+    const savedSystem = localStorage.getItem("systemSettings");
+    if (savedSystem) setSystem(JSON.parse(savedSystem));
   }, []);
 
+  // Photo upload - saves to localStorage permanently
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -51,20 +65,49 @@ export default function SettingsPage() {
 
     const reader = new FileReader();
     reader.onload = (event) => {
-      const result = event.target?.result as string;
-      setAvatarPreview(result);
-      localStorage.setItem("avatar", result);
-      // Trigger storage event for other components
-      window.dispatchEvent(new Event("storage"));
-      toast.success("Photo updated!");
+      const base64 = event.target?.result as string;
+      setAvatarPreview(base64);
+      
+      // Save to BOTH keys for persistence
+      localStorage.setItem("avatar", base64);
+      localStorage.setItem("userAvatar", base64);
+      
+      // Update user object with avatar
+      if (user) {
+        const updatedUser = { ...user, avatar: base64 };
+        localStorage.setItem("user", JSON.stringify(updatedUser));
+        setUser(updatedUser);
+      }
+      
+      // Dispatch storage event for other components
+      window.dispatchEvent(new StorageEvent("storage", {
+        key: "avatar",
+        newValue: base64,
+      }));
+      
+      toast.success("Photo saved!");
     };
     reader.readAsDataURL(file);
   };
 
+  // Remove photo
+  const handleRemovePhoto = () => {
+    setAvatarPreview("");
+    localStorage.removeItem("avatar");
+    localStorage.removeItem("userAvatar");
+    if (user) {
+      const updatedUser = { ...user, avatar: "" };
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+      setUser(updatedUser);
+    }
+    toast.success("Photo removed");
+  };
+
   const handleSaveProfile = () => {
-    const updatedUser = { ...user, ...profile };
+    const updatedUser = { ...user, ...profile, avatar: avatarPreview };
     localStorage.setItem("user", JSON.stringify(updatedUser));
     setUser(updatedUser);
+    window.dispatchEvent(new Event("storage"));
     toast.success("Profile updated!");
   };
 
@@ -115,9 +158,7 @@ export default function SettingsPage() {
               <div className="flex items-center gap-6">
                 <div className="relative">
                   <Avatar className="h-24 w-24 cursor-pointer" onClick={() => fileInputRef.current?.click()}>
-                    {(avatarPreview || localStorage.getItem("avatar")) && (
-                      <AvatarImage src={avatarPreview || localStorage.getItem("avatar") || ""} />
-                    )}
+                    {avatarPreview && <AvatarImage src={avatarPreview} />}
                     <AvatarFallback className="text-2xl bg-primary text-primary-foreground">
                       {profile.firstName?.[0] || "U"}{profile.lastName?.[0] || ""}
                     </AvatarFallback>
@@ -130,7 +171,10 @@ export default function SettingsPage() {
                 <div>
                   <h3 className="font-semibold text-lg">{profile.firstName} {profile.lastName}</h3>
                   <p className="text-sm text-muted-foreground">{user?.role || "User"}</p>
-                  <p className="text-xs text-muted-foreground mt-1">Click avatar to upload photo</p>
+                  <div className="flex gap-2 mt-2">
+                    <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>Upload Photo</Button>
+                    {avatarPreview && <Button variant="outline" size="sm" onClick={handleRemovePhoto} className="text-red-500">Remove</Button>}
+                  </div>
                 </div>
               </div>
               <Separator />
@@ -187,21 +231,9 @@ export default function SettingsPage() {
             <CardContent className="space-y-4">
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2"><Label>Hospital Name</Label><Input title="Input field" value={system.hospitalName} onChange={e => setSystem({...system, hospitalName: e.target.value})} /></div>
-                <div className="space-y-2"><Label>Timezone</Label>
-                  <select aria-label="Select option" title="Select option" value={system.timezone} onChange={e => setSystem({...system, timezone: e.target.value})} className="w-full p-2 border rounded-lg bg-background">
-                    <option value="America/New_York">Eastern</option><option value="America/Chicago">Central</option><option value="America/Denver">Mountain</option><option value="America/Los_Angeles">Pacific</option>
-                  </select>
-                </div>
-                <div className="space-y-2"><Label>Language</Label>
-                  <select aria-label="Select option" title="Select option" value={system.language} onChange={e => setSystem({...system, language: e.target.value})} className="w-full p-2 border rounded-lg bg-background">
-                    <option value="en">English</option><option value="es">Spanish</option><option value="fr">French</option>
-                  </select>
-                </div>
-                <div className="space-y-2"><Label>Date Format</Label>
-                  <select aria-label="Select option" title="Select option" value={system.dateFormat} onChange={e => setSystem({...system, dateFormat: e.target.value})} className="w-full p-2 border rounded-lg bg-background">
-                    <option value="MM/DD/YYYY">MM/DD/YYYY</option><option value="DD/MM/YYYY">DD/MM/YYYY</option><option value="YYYY-MM-DD">YYYY-MM-DD</option>
-                  </select>
-                </div>
+                <div className="space-y-2"><Label>Timezone</Label><select aria-label="Select option" title="Select option" value={system.timezone} onChange={e => setSystem({...system, timezone: e.target.value})} className="w-full p-2 border rounded-lg bg-background"><option value="America/New_York">Eastern</option><option value="America/Chicago">Central</option><option value="America/Denver">Mountain</option><option value="America/Los_Angeles">Pacific</option></select></div>
+                <div className="space-y-2"><Label>Language</Label><select aria-label="Select option" title="Select option" value={system.language} onChange={e => setSystem({...system, language: e.target.value})} className="w-full p-2 border rounded-lg bg-background"><option value="en">English</option><option value="es">Spanish</option><option value="fr">French</option></select></div>
+                <div className="space-y-2"><Label>Date Format</Label><select aria-label="Select option" title="Select option" value={system.dateFormat} onChange={e => setSystem({...system, dateFormat: e.target.value})} className="w-full p-2 border rounded-lg bg-background"><option value="MM/DD/YYYY">MM/DD/YYYY</option><option value="DD/MM/YYYY">DD/MM/YYYY</option><option value="YYYY-MM-DD">YYYY-MM-DD</option></select></div>
               </div>
               <Button onClick={handleSaveSystem} className="gap-2"><Save className="h-4 w-4" />Save</Button>
             </CardContent>

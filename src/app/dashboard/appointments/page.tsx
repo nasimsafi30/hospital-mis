@@ -336,7 +336,7 @@ export default function AppointmentsPage() {
                           "p-3 rounded-full",
                           new Date(appointment.appointmentDate).toDateString() === new Date().toDateString()
                             ? "bg-blue-100 dark:bg-blue-900"
-                            : "bg-gray-100 dark:bg-gray-800"
+                            : "bg-gray-100 dark:bg-card"
                         )}>
                           <Calendar className="h-5 w-5 text-blue-500" />
                         </div>

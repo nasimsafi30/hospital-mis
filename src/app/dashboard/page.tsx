@@ -76,7 +76,7 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="p-6 space-y-6 bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 min-h-screen">
+    <div className="p-6 space-y-6 bg-gradient-to-b  min-h-screen">
       {/* Header */}
       <motion.div 
         initial={{ opacity: 0, y: -20 }}
@@ -84,18 +84,18 @@ export default function DashboardPage() {
         className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4"
       >
         <div>
-          <h1 className="text-3xl font-bold text-white">
+          <h1 className="text-3xl font-bold text-foreground">
             Welcome back, <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">{user?.firstName || "User"}</span>
           </h1>
-          <p className="text-gray-400 mt-1">
+          <p className="text-muted-foreground mt-1">
             {format(currentTime, 'EEEE, MMMM dd, yyyy')} • {format(currentTime, 'hh:mm a')}
           </p>
         </div>
         <div className="flex gap-3">
-          <Button variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/5">
+          <Button variant="outline" size="sm" className="border-border text-foreground hover:bg-card/50">
             <Search className="h-4 w-4 mr-2" /> Search
           </Button>
-          <Button variant="outline" size="sm" className="border-white/10 text-white hover:bg-white/5">
+          <Button variant="outline" size="sm" className="border-border text-foreground hover:bg-card/50">
             <Bell className="h-4 w-4" />
           </Button>
         </div>
@@ -111,7 +111,7 @@ export default function DashboardPage() {
             transition={{ delay: index * 0.1 }}
             whileHover={{ y: -5 }}
           >
-            <Card className="border-0 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 transition-all cursor-pointer">
+            <Card className="border-0 bg-card/50 backdrop-blur-xl border border-border rounded-2xl overflow-hidden hover:bg-card/80 transition-all cursor-pointer">
               <CardContent className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <div className={`p-3 rounded-xl ${stat.bgColor}`}>
@@ -122,8 +122,8 @@ export default function DashboardPage() {
                     {stat.change}
                   </div>
                 </div>
-                <p className="text-sm text-gray-400">{stat.title}</p>
-                <p className="text-3xl font-bold text-white mt-1">{stat.value}</p>
+                <p className="text-sm text-muted-foreground">{stat.title}</p>
+                <p className="text-3xl font-bold text-foreground mt-1">{stat.value}</p>
               </CardContent>
             </Card>
           </motion.div>
@@ -133,9 +133,9 @@ export default function DashboardPage() {
       {/* Charts Row */}
       <div className="grid gap-6 md:grid-cols-2">
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}>
-          <Card className="border-0 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+          <Card className="border-0 bg-card/50 backdrop-blur-xl border border-border rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <BarChart3 className="h-5 w-5 text-blue-400" />
                 Weekly Appointments
               </CardTitle>
@@ -161,9 +161,9 @@ export default function DashboardPage() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}>
-          <Card className="border-0 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+          <Card className="border-0 bg-card/50 backdrop-blur-xl border border-border rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <Activity className="h-5 w-5 text-purple-400" />
                 Department Distribution
               </CardTitle>
@@ -188,9 +188,9 @@ export default function DashboardPage() {
       {/* Quick Actions & Recent Activity */}
       <div className="grid gap-6 md:grid-cols-3">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} className="md:col-span-1">
-          <Card className="border-0 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+          <Card className="border-0 bg-card/50 backdrop-blur-xl border border-border rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <Zap className="h-5 w-5 text-yellow-400" />
                 Quick Actions
               </CardTitle>
@@ -200,7 +200,7 @@ export default function DashboardPage() {
                 {quickActions.map((action) => (
                   <Link key={action.label} href={action.href}>
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                      className={`p-4 rounded-xl bg-gradient-to-br ${action.color} text-white text-center cursor-pointer shadow-lg hover:shadow-xl transition-all`}
+                      className={`p-4 rounded-xl bg-gradient-to-br ${action.color} text-foreground text-center cursor-pointer shadow-lg hover:shadow-xl transition-all`}
                     >
                       <action.icon className="h-6 w-6 mx-auto mb-2" />
                       <p className="text-xs font-medium">{action.label}</p>
@@ -213,9 +213,9 @@ export default function DashboardPage() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="md:col-span-2">
-          <Card className="border-0 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl">
+          <Card className="border-0 bg-card/50 backdrop-blur-xl border border-border rounded-2xl">
             <CardHeader>
-              <CardTitle className="text-white flex items-center gap-2">
+              <CardTitle className="text-foreground flex items-center gap-2">
                 <Clock className="h-5 w-5 text-cyan-400" />
                 Recent Activities
               </CardTitle>
@@ -226,16 +226,16 @@ export default function DashboardPage() {
                   <motion.div
                     key={activity.id}
                     whileHover={{ x: 5 }}
-                    className="flex items-center gap-4 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all cursor-pointer"
+                    className="flex items-center gap-4 p-3 rounded-xl bg-card/50 hover:bg-card/80 transition-all cursor-pointer"
                   >
                     <div className={`p-2 rounded-lg ${activity.bg}`}>
                       <activity.icon className={`h-5 w-5 ${activity.color}`} />
                     </div>
                     <div className="flex-1">
-                      <p className="text-sm font-medium text-white">{activity.action}</p>
-                      <p className="text-xs text-gray-400">Patient: {activity.patient}</p>
+                      <p className="text-sm font-medium text-foreground">{activity.action}</p>
+                      <p className="text-xs text-muted-foreground">Patient: {activity.patient}</p>
                     </div>
-                    <span className="text-xs text-gray-500">{activity.time}</span>
+                    <span className="text-xs text-muted-foreground">{activity.time}</span>
                   </motion.div>
                 ))}
               </div>

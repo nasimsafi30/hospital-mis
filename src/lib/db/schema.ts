@@ -493,6 +493,27 @@ export const notifications = pgTable('notifications', {
   createdAt: timestamp('created_at').defaultNow(),
 });
 
+
+// ==================== FINANCE TABLE ====================
+
+export const financeTransactions = pgTable('finance_transactions', {
+  id: serial('id').primaryKey(),
+  type: varchar('type', { length: 20 }).notNull(),
+  category: varchar('category', { length: 100 }).notNull(),
+  amount: decimal('amount', { precision: 12, scale: 2 }).notNull(),
+  description: text('description'),
+  date: date('date').defaultNow().notNull(),
+  createdBy: integer('created_by').references(() => users.id),
+  createdAt: timestamp('created_at').defaultNow(),
+  updatedAt: timestamp('updated_at').defaultNow(),
+});
+
+export const financeTransactionsRelations = relations(financeTransactions, ({ one }) => ({
+  user: one(users, {
+    fields: [financeTransactions.createdBy],
+    references: [users.id],
+  }),
+}));
 // ==================== RELATIONS ====================
 
 export const usersRelations = relations(users, ({ many }) => ({

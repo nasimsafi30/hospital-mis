@@ -188,7 +188,7 @@ export default function PrescriptionsPage() {
       {/* Add Form Modal */}
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-md mx-4 shadow-2xl">
+          <div className="bg-white dark:bg-card rounded-2xl p-6 w-full max-w-md mx-4 shadow-2xl">
             <h2 className="text-xl font-bold mb-4">Add Prescription</h2>
             <form onSubmit={handleSubmit} className="space-y-3">
               <div className="grid grid-cols-2 gap-3">

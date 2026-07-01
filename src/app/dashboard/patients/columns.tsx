@@ -92,7 +92,7 @@ export default function PatientsPage() {
       {/* QR Modal */}
       {qrPatient && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setQrPatient(null)}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="bg-white dark:bg-card rounded-2xl p-8 text-center shadow-2xl" onClick={e => e.stopPropagation()}>
             <h2 className="text-xl font-bold">{qrPatient.firstName} {qrPatient.lastName}</h2>
             <p className="text-sm text-muted-foreground mb-4">{qrPatient.patientId}</p>
             <div className="bg-white p-4 rounded-xl inline-block">

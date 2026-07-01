@@ -11,7 +11,7 @@ import {
   Pill, FlaskConical, Package, DollarSign, BarChart3,
   Settings, HelpCircle, ChevronLeft, ChevronRight,
   BedDouble, Building2, DoorOpen, ClipboardList, Activity,
-  FileSearch, Shield, Heart, Stethoscope,
+  FileSearch, Shield, Heart, Stethoscope, TrendingUp,
 } from "lucide-react";
 
 const navigation = [
@@ -24,6 +24,7 @@ const navigation = [
   { title: "Services", items: [
     { title: "Pharmacy", href: "/dashboard/pharmacy", icon: Pill },{ title: "Laboratory", href: "/dashboard/laboratory", icon: FlaskConical },
     { title: "Inventory", href: "/dashboard/inventory", icon: Package },{ title: "Billing", href: "/dashboard/billing", icon: DollarSign },
+      { title: "Finance", href: "/dashboard/finance", icon: TrendingUp },
   ]},
   { title: "Facilities", items: [
     { title: "Departments", href: "/dashboard/departments", icon: Building2 },{ title: "Rooms", href: "/dashboard/rooms", icon: DoorOpen },

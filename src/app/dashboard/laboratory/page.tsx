@@ -119,7 +119,7 @@ export default function LaboratoryPage() {
 
       {showForm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 w-full max-w-md mx-4">
+          <div className="bg-white dark:bg-card rounded-2xl p-6 w-full max-w-md mx-4">
             <h2 className="text-xl font-bold mb-4">New Lab Test</h2>
             <form onSubmit={handleSubmit} className="space-y-3">
               <Input title="Input field" type="number" placeholder="Patient ID" value={form.patientId} onChange={e => setForm({...form, patientId: e.target.value})} required />

@@ -306,7 +306,7 @@ export default function PharmacyPage() {
       {/* QR Code Modal */}
       {qrMedicine && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setQrMedicine(null)}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl p-8 text-center shadow-2xl" onClick={e => e.stopPropagation()}>
+          <div className="bg-white dark:bg-card rounded-2xl p-8 text-center shadow-2xl" onClick={e => e.stopPropagation()}>
             <h2 className="text-xl font-bold mb-2">{qrMedicine.itemName}</h2>
             <p className="text-sm text-muted-foreground mb-4">Scan with barcode scanner or phone</p>
             <div className="bg-white p-4 rounded-xl inline-block border-2 border-gray-200">

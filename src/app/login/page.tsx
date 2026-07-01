@@ -1,13 +1,25 @@
 "use client";
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { toast } from "sonner";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { motion, AnimatePresence } from "framer-motion";
-import { Eye, EyeOff, Lock, Mail, Hospital, Loader2, ArrowRight, Shield, Activity, Heart, Stethoscope } from "lucide-react";
-import Link from "next/link";
-import { toast } from "sonner";
+import { 
+  Eye, 
+  EyeOff, 
+  Lock, 
+  Mail, 
+  Hospital, 
+  Loader2, 
+  ArrowRight, 
+  Shield, 
+  Activity, 
+  Heart, 
+  Stethoscope 
+} from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -70,10 +82,26 @@ export default function LoginPage() {
     const cleanPassword = password; // Don't trim password - spaces might be intentional
 
     // Validate
-    if (!cleanEmail) { setError("Email is required"); setIsLoading(false); return; }
-    if (!validateEmail(cleanEmail)) { setError("Invalid email format"); setIsLoading(false); return; }
-    if (!cleanPassword) { setError("Password is required"); setIsLoading(false); return; }
-    if (!validatePassword(cleanPassword)) { setError("Password must be 6-128 characters"); setIsLoading(false); return; }
+    if (!cleanEmail) { 
+      setError("Email is required"); 
+      setIsLoading(false); 
+      return; 
+    }
+    if (!validateEmail(cleanEmail)) { 
+      setError("Invalid email format"); 
+      setIsLoading(false); 
+      return; 
+    }
+    if (!cleanPassword) { 
+      setError("Password is required"); 
+      setIsLoading(false); 
+      return; 
+    }
+    if (!validatePassword(cleanPassword)) { 
+      setError("Password must be 6-128 characters"); 
+      setIsLoading(false); 
+      return; 
+    }
 
     setIsLoading(true);
     setError("");
@@ -111,56 +139,96 @@ export default function LoginPage() {
     }
   };
 
+  // Statistics data
+  const stats = [
+    { 
+      icon: Activity, 
+      label: "Patients Managed", 
+      value: "10,000+", 
+      color: "from-blue-500 to-blue-700 dark:from-blue-400 dark:to-blue-600" 
+    },
+    { 
+      icon: Heart, 
+      label: "Appointments Today", 
+      value: "156", 
+      color: "from-red-500 to-pink-700 dark:from-red-400 dark:to-pink-600" 
+    },
+    { 
+      icon: Stethoscope, 
+      label: "Uptime", 
+      value: "99.9%", 
+      color: "from-green-500 to-emerald-700 dark:from-green-400 dark:to-emerald-600" 
+    },
+    { 
+      icon: Shield, 
+      label: "Support", 
+      value: "24/7", 
+      color: "from-purple-500 to-violet-700 dark:from-purple-400 dark:to-violet-600" 
+    },
+  ];
+
   return (
-    <div className="min-h-screen flex bg-gradient-to-br from-slate-950 via-blue-950 to-indigo-950 relative overflow-hidden">
+    <div className="min-h-screen flex bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-950 dark:via-blue-950 dark:to-indigo-950 relative overflow-hidden transition-colors duration-300">
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-500/5 rounded-full blur-3xl" />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-blue-500/20 dark:bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-indigo-500/20 dark:bg-indigo-500/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-purple-500/10 dark:bg-purple-500/5 rounded-full blur-3xl" />
       </div>
 
       {/* Left Side - Branding */}
       <div className="hidden lg:flex lg:w-1/2 relative">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-indigo-600/10 backdrop-blur-3xl" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(59,130,246,0.2),transparent_70%)]" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 to-indigo-600/10 dark:from-blue-600/10 dark:to-indigo-600/10 backdrop-blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,rgba(59,130,246,0.1),transparent_70%)] dark:bg-[radial-gradient(circle_at_30%_50%,rgba(59,130,246,0.2),transparent_70%)]" />
         
-        <div className="relative z-10 flex flex-col justify-center px-16 text-white">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+        <div className="relative z-10 flex flex-col justify-center px-16 text-slate-900 dark:text-white">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }} 
+            animate={{ opacity: 1, y: 0 }} 
+            transition={{ duration: 0.8 }}
+          >
             <div className="flex items-center gap-4 mb-12">
               <motion.div 
-                className="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 flex items-center justify-center shadow-2xl"
+                className="w-16 h-16 rounded-2xl bg-white/80 dark:bg-white/10 backdrop-blur-xl border border-slate-200/50 dark:border-white/20 flex items-center justify-center shadow-lg dark:shadow-2xl"
                 whileHover={{ scale: 1.05, rotate: 5 }}
               >
-                <Hospital className="h-8 w-8 text-white" />
+                <Hospital className="h-8 w-8 text-blue-600 dark:text-white" />
               </motion.div>
               <div>
-                <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-white to-blue-200 bg-clip-text text-transparent">Hospital MIS</h1>
-                <p className="text-blue-300/80 text-sm mt-1">Management Information System</p>
+                <h1 className="text-4xl font-bold tracking-tight bg-gradient-to-r from-slate-900 to-blue-600 dark:from-white dark:to-blue-200 bg-clip-text text-transparent">
+                  Hospital MIS
+                </h1>
+                <p className="text-slate-600 dark:text-blue-300/80 text-sm mt-1">
+                  Management Information System
+                </p>
               </div>
             </div>
 
-            <h2 className="text-5xl font-bold mb-6 leading-tight">
+            <h2 className="text-5xl font-bold mb-6 leading-tight text-slate-900 dark:text-white">
               Smart Healthcare<br />
-              <span className="bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">Management Starts Here</span>
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-300 bg-clip-text text-transparent">
+                Management Starts Here
+              </span>
             </h2>
-            <p className="text-lg text-blue-100/70 mb-12 leading-relaxed max-w-md">
+            <p className="text-lg text-slate-600 dark:text-blue-100/70 mb-12 leading-relaxed max-w-md">
               Streamline patient care, manage appointments, track inventory, and handle billing — all in one powerful platform.
             </p>
 
             <div className="grid grid-cols-2 gap-4">
-              {[
-                { icon: Activity, label: "Patients Managed", value: "10,000+", color: "from-blue-400 to-blue-600" },
-                { icon: Heart, label: "Appointments Today", value: "156", color: "from-red-400 to-pink-600" },
-                { icon: Stethoscope, label: "Uptime", value: "99.9%", color: "from-green-400 to-emerald-600" },
-                { icon: Shield, label: "Support", value: "24/7", color: "from-purple-400 to-violet-600" },
-              ].map((stat, i) => (
-                <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 + i * 0.1, duration: 0.5 }} whileHover={{ scale: 1.03, y: -2 }} className="p-5 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all cursor-pointer group">
+              {stats.map((stat, i) => (
+                <motion.div 
+                  key={stat.label} 
+                  initial={{ opacity: 0, y: 20 }} 
+                  animate={{ opacity: 1, y: 0 }} 
+                  transition={{ delay: 0.4 + i * 0.1, duration: 0.5 }} 
+                  whileHover={{ scale: 1.03, y: -2 }} 
+                  className="p-5 rounded-2xl bg-white/80 dark:bg-white/5 border border-slate-200/50 dark:border-white/10 backdrop-blur-sm hover:bg-white dark:hover:bg-white/10 transition-all cursor-pointer group shadow-sm dark:shadow-none"
+                >
                   <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
                     <stat.icon className="h-5 w-5 text-white" />
                   </div>
-                  <p className="text-3xl font-bold text-white">{stat.value}</p>
-                  <p className="text-sm text-blue-200/70">{stat.label}</p>
+                  <p className="text-3xl font-bold text-slate-900 dark:text-white">{stat.value}</p>
+                  <p className="text-sm text-slate-600 dark:text-blue-200/70">{stat.label}</p>
                 </motion.div>
               ))}
             </div>
@@ -170,29 +238,55 @@ export default function LoginPage() {
 
       {/* Right Side - Login Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-        <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.6, ease: "easeOut" }} className="w-full max-w-md">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.95, y: 20 }} 
+          animate={{ opacity: 1, scale: 1, y: 0 }} 
+          transition={{ duration: 0.6, ease: "easeOut" }} 
+          className="w-full max-w-md"
+        >
           
           <div className="lg:hidden text-center mb-8">
-            <motion.div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 mb-4 shadow-lg shadow-blue-500/25" whileHover={{ scale: 1.05 }}>
+            <motion.div 
+              className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 mb-4 shadow-lg shadow-blue-500/25" 
+              whileHover={{ scale: 1.05 }}
+            >
               <Hospital className="h-8 w-8 text-white" />
             </motion.div>
-            <h1 className="text-3xl font-bold text-white">Hospital MIS</h1>
+            <h1 className="text-3xl font-bold text-slate-900 dark:text-white">
+              Hospital MIS
+            </h1>
           </div>
 
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl shadow-2xl shadow-black/20 overflow-hidden">
+          <div className="bg-white dark:bg-white/10 backdrop-blur-xl border border-slate-200/50 dark:border-white/20 rounded-3xl shadow-xl dark:shadow-2xl shadow-black/5 dark:shadow-black/20 overflow-hidden transition-colors duration-300">
             <div className="p-8">
               <div className="text-center mb-8">
-                <motion.div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 mb-4 shadow-lg" whileHover={{ rotate: 10 }}>
+                <motion.div 
+                  className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 dark:from-blue-500 dark:to-indigo-500 mb-4 shadow-lg shadow-blue-500/25 dark:shadow-lg" 
+                  whileHover={{ rotate: 10 }}
+                >
                   <Shield className="h-7 w-7 text-white" />
                 </motion.div>
-                <h2 className="text-2xl font-bold text-white">Welcome Back</h2>
-                <p className="text-blue-200/60 mt-1">Sign in to your account</p>
-                {locked && <p className="text-red-400 text-sm mt-2">🔒 Temporarily locked</p>}
+                <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+                  Welcome Back
+                </h2>
+                <p className="text-slate-600 dark:text-blue-200/60 mt-1">
+                  Sign in to your account
+                </p>
+                {locked && (
+                  <p className="text-red-500 dark:text-red-400 text-sm mt-2">
+                    🔒 Temporarily locked
+                  </p>
+                )}
               </div>
 
               <AnimatePresence>
                 {error && (
-                  <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-sm text-red-300 text-center backdrop-blur-sm">
+                  <motion.div 
+                    initial={{ opacity: 0, height: 0 }} 
+                    animate={{ opacity: 1, height: "auto" }} 
+                    exit={{ opacity: 0, height: 0 }} 
+                    className="mb-6 p-4 bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-xl text-sm text-red-600 dark:text-red-300 text-center backdrop-blur-sm"
+                  >
                     {error}
                   </motion.div>
                 )}
@@ -200,37 +294,79 @@ export default function LoginPage() {
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="space-y-2">
-                  <Label className="text-blue-100">Email Address</Label>
+                  <Label className="text-slate-700 dark:text-blue-100">
+                    Email Address
+                  </Label>
                   <div className="relative group">
-                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-300/50" />
-                    <Input type="email" placeholder="admin@hospital.com" value={email} onChange={(e) => setEmail(e.target.value)} className="pl-11 h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-blue-300/30 focus:border-blue-500" required disabled={isLoading || locked} autoComplete="email" />
+                    <Mail className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-blue-300/50" />
+                    <Input 
+                      type="email" 
+                      placeholder="admin@hospital.com" 
+                      value={email} 
+                      onChange={(e) => setEmail(e.target.value)} 
+                      className="pl-11 h-12 rounded-xl bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-blue-300/30 focus:border-blue-500 transition-colors" 
+                      required 
+                      disabled={isLoading || locked} 
+                      autoComplete="email" 
+                    />
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
-                    <Label className="text-blue-100">Password</Label>
-                    <Link href="/forgot-password" className="text-xs text-blue-400 hover:text-blue-300">Forgot password?</Link>
+                    <Label className="text-slate-700 dark:text-blue-100">
+                      Password
+                    </Label>
+                    <Link 
+                      href="/forgot-password" 
+                      className="text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 transition-colors"
+                    >
+                      Forgot password?
+                    </Link>
                   </div>
                   <div className="relative group">
-                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-blue-300/50" />
-                    <Input type={showPassword ? "text" : "password"} placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} className="pl-11 pr-12 h-12 rounded-xl bg-white/5 border-white/10 text-white placeholder:text-blue-300/30 focus:border-blue-500" required disabled={isLoading || locked} autoComplete="current-password" />
-                    <Button type="button" variant="ghost" size="icon" className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 text-blue-300/50 hover:text-white" onClick={() => setShowPassword(!showPassword)}>
+                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400 dark:text-blue-300/50" />
+                    <Input 
+                      type={showPassword ? "text" : "password"} 
+                      placeholder="Enter your password" 
+                      value={password} 
+                      onChange={(e) => setPassword(e.target.value)} 
+                      className="pl-11 pr-12 h-12 rounded-xl bg-slate-50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-blue-300/30 focus:border-blue-500 transition-colors" 
+                      required 
+                      disabled={isLoading || locked} 
+                      autoComplete="current-password" 
+                    />
+                    <Button 
+                      type="button" 
+                      variant="ghost" 
+                      size="icon" 
+                      className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 text-slate-400 hover:text-slate-600 dark:text-blue-300/50 dark:hover:text-white transition-colors" 
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
                       {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                     </Button>
                   </div>
                 </div>
 
                 <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
-                  <Button type="submit" className="w-full h-12 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:via-blue-400 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-blue-500/25 transition-all duration-300 border-0" disabled={isLoading || locked}>
-                    {isLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <span className="flex items-center gap-2">Sign In<ArrowRight className="h-4 w-4" /></span>}
+                  <Button 
+                    type="submit" 
+                    className="w-full h-12 rounded-xl bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:via-blue-400 hover:to-indigo-500 text-white font-semibold shadow-lg shadow-blue-500/25 transition-all duration-300 border-0" 
+                    disabled={isLoading || locked}
+                  >
+                    {isLoading ? (
+                      <Loader2 className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        Sign In
+                        <ArrowRight className="h-4 w-4" />
+                      </span>
+                    )}
                   </Button>
                 </motion.div>
               </form>
 
-              <div className="mt-8 pt-6 border-t border-white/10">
-                
-              </div>
+              <div className="mt-8 pt-6 border-t border-slate-200/50 dark:border-white/10" />
             </div>
           </div>
         </motion.div>

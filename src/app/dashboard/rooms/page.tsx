@@ -18,7 +18,7 @@ import { RoomForm } from "@/components/forms/room-form";
 import { BedForm } from "@/components/forms/bed-form";
 
 const roomTypeColors: Record<string, string> = {
-  general: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300",
+  general: "bg-gray-100 text-gray-800 dark:bg-card dark:text-gray-300",
   semi_private: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300",
   private: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300",
   icu: "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300",
